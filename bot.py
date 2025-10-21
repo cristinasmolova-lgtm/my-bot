@@ -33,7 +33,7 @@ if not TOKEN:
 
 # === Пути к файлам ===
 BASE_DIR = Path("C:/Users/Леново/PycharmProjects/PythonProject").resolve()
-PRESENTATION_PATH = BASE_DIR / "Добро+пожаловать+в+Сбер_короткая_compressed.pdf"
+PRESENTATION_PATH = BASE_DIR / "Добро пожаловать в Сбер окт 25 v2.pdf"  # ← обновлённый путь
 PHOTO_P2P_PATH = BASE_DIR / "P2P.png"
 PHOTO_CULTURE_PATH = BASE_DIR / "меро.png"
 EXCEL_PATH = BASE_DIR / "users.xlsx"
@@ -112,7 +112,7 @@ def get_back_and_ask():
 # === Диалог знакомства ===
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data.clear()
-    await update.message.reply_text("Давай знакомиться! Напиши свое имя", reply_markup=ReplyKeyboardRemove())
+    await update.message.reply_text("💬 Давай знакомиться! Напиши свое имя", reply_markup=ReplyKeyboardRemove())
     return ASK_NAME
 
 async def ask_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -121,7 +121,7 @@ async def ask_name(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Пожалуйста, напиши своё имя.")
         return ASK_NAME
     context.user_data["name"] = name
-    await update.message.reply_text("Напиши свой табельный номер, чтобы я мог найти тебя в системе")
+    await update.message.reply_text("Напиши свой табельный номер, чтобы я мог найти тебя в системе 💯")
     return ASK_TAB_NUMBER
 
 async def ask_tab_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -131,7 +131,7 @@ async def ask_tab_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ASK_TAB_NUMBER
     context.user_data["tab_number"] = tab
     await update.message.reply_text(
-        "Напиши дату своего первого рабочего дня, чтобы мы могли присылать тебе уведомления и важные напоминания"
+        "📆 Напиши дату своего первого рабочего дня, чтобы мы могли присылать тебе уведомления и важные напоминания"
     )
     return ASK_FIRST_DAY
 
@@ -154,7 +154,7 @@ async def ask_first_day(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.reply_text(
-        "Рад знакомству! Выбери пункт меню и изучай материалы:",
+        "💚 Рад знакомству! Выбери пункт меню и изучай материалы:",
         reply_markup=get_main_menu()
     )
     return MAIN_MENU
@@ -165,7 +165,7 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if text == "1. Сбер на Урале":
         await update.message.reply_text(
-            "Самую важную информацию про Сбер и Урал я собрал для тебя в презентации - изучай, задавай вопросы, если есть"
+            "🧩 Самую важную информацию про Сбер и Урал я собрал для тебя в презентации - изучай, задавай вопросы, если есть"
         )
         if PRESENTATION_PATH.exists():
             try:
@@ -175,13 +175,13 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         reply_markup=get_back_and_ask()
                     )
             except Exception as e:
-                await update.message.reply_text(f"⚠️ Ошибка: {str(e)}", reply_markup=get_back_and_ask())
+                await update.message.reply_text(f"⚠️ Ошибка при отправке презентации: {str(e)}", reply_markup=get_back_and_ask())
         else:
-            await update.message.reply_text("⚠️ Презентация не найдена.", reply_markup=get_back_and_ask())
+            await update.message.reply_text("⚠️ Презентация не найдена на сервере.", reply_markup=get_back_and_ask())
 
     elif text == "2. Видео-приветствие":
         await update.message.reply_text(
-            "Ты стал частью большой команды Сбера и тебя приветствуют наши топ-менеджеры. Смотри видео.\n\n"
+            "Ты стал частью большой команды Сбера и тебя приветствуют наши топ-менеджеры. Смотри видео 📽️.\n\n"
             "https://disk.yandex.ru/d/eAWTc08UnOBPwQ",
             reply_markup=get_back_and_ask()
         )
@@ -189,9 +189,9 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "3. Peer-to-peer":
         msg = (
             "На всем периоде адаптации твоя основная поддержка - это HR-платформа Пульс и твой бадди.\n"
-            "Не забывай просматривать уведомления и задачи, проходи индивидуальный трек адаптации.\n\n"
-            "Бадди - это один из представителей ролей взаимного развития (peer-to-peer).\n"
-            "Культура взаимного развития - это также консультанты по развитию, коучи, наставники, фасилитаторы, медиаторы. "
+            "📌 Не забывай просматривать уведомления и задачи, проходи индивидуальный трек адаптации.\n\n"
+            "🧬 Бадди - это один из представителей ролей взаимного развития (peer-to-peer).\n"
+            "🖇️ Культура взаимного развития - это также консультанты по развитию, коучи, наставники, фасилитаторы, медиаторы. "
             "Подробнее ты сможешь ознакомиться в Пульс (раздел Развитие)."
         )
         await update.message.reply_text(msg)
@@ -199,11 +199,11 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             with open(PHOTO_P2P_PATH, 'rb') as f:
                 await update.message.reply_photo(photo=InputFile(f), reply_markup=get_back_and_ask())
         else:
-            await update.message.reply_text("🖼️ Схема временно недоступна.", reply_markup=get_back_and_ask())
+            await update.message.reply_text("🖼️ Схема ролей временно недоступна.", reply_markup=get_back_and_ask())
 
     elif text == "4. Культура и сообщества":
         await update.message.reply_text(
-            "Уральский банк живет насыщенной культурной и спортивной жизнью. "
+            "Уральский банк живет насыщенной 🎨культурной и 🏆спортивной жизнью. "
             "Обязательно присоединяйся к мероприятиям - вся информация приходит тебе на почту. "
             "Вот несколько фото с последних событий:"
         )
@@ -211,12 +211,12 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             with open(PHOTO_CULTURE_PATH, 'rb') as f:
                 await update.message.reply_photo(photo=InputFile(f))
         else:
-            await update.message.reply_text("⚠️ Фото не найдено.")
+            await update.message.reply_text("⚠️ Фото мероприятий не найдено.")
 
         await update.message.reply_text(
             "Вступай в сообщества Уральского банка — будь в курсе событий!\n\n"
-            "🗣️ **Телеграм-канал «Говорит Урал»** — новости, анонсы и важные события\n"
-            "🤝 **Телеграм-канал «Биржа волонтёров Екатеринбург (УБ)»** — волонтёрские активности, поддержка и вдохновение\n\n"
+            "📢️ **Телеграм-канал «Говорит Урал»** — новости, анонсы и важные события\n"
+            "🎗️ **Телеграм-канал «Биржа волонтёров Екатеринбург (УБ)»** — волонтёрские активности, поддержка и вдохновение\n\n"
             "Ссылки на каналы указаны в презентации, которую ты уже изучил.\n"
             "Если остались вопросы — пиши в раздел **«Контакты»**!",
             parse_mode="Markdown",
@@ -227,17 +227,17 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif text == "5. Контакты":
         await update.message.reply_text(
-            "Любые вопросы направляй на почту куратора по адаптации в Уральском банке "
+            "📨 Любые вопросы направляй на почту куратора по адаптации в Уральском банке "
             "Котельниковой Кристине Kotelnikova.K.A@sberbank.ru",
             reply_markup=get_back_and_ask()
         )
 
     elif text == "6. Оставить обратную связь":
         await update.message.reply_text(
-            "Спасибо, что хочешь помочь нам стать лучше! Ответь, пожалуйста, на три коротких вопроса.",
+            "Спасибо, что помогаешь нам стать лучше! 🔑 Ответь, пожалуйста, на три коротких вопроса",
             reply_markup=ReplyKeyboardRemove()
         )
-        await update.message.reply_text("1. Опиши, что понравилось при использовании бота:")
+        await update.message.reply_text("🟢 Опиши, что понравилось при использовании бота:")
         return FEEDBACK_LIKED
 
     return MAIN_MENU
@@ -246,13 +246,13 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def feedback_liked(update: Update, context: ContextTypes.DEFAULT_TYPE):
     liked = update.message.text.strip()
     context.user_data["feedback_liked"] = liked
-    await update.message.reply_text("2. Напиши, чего тебе не хватило при использовании бота:")
+    await update.message.reply_text("🟢 Напиши, чего тебе не хватило при использовании бота:")
     return FEEDBACK_MISSING
 
 async def feedback_missing(update: Update, context: ContextTypes.DEFAULT_TYPE):
     missing = update.message.text.strip()
     context.user_data["feedback_missing"] = missing
-    await update.message.reply_text("3. Что можно добавить в чат-бот, чтобы его использование было максимально полезным для новых сотрудников?")
+    await update.message.reply_text("🟢 Что можно добавить в чат-бот, чтобы его использование было максимально полезным для новых сотрудников?")
     return FEEDBACK_SUGGEST
 
 async def feedback_suggest(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -260,8 +260,8 @@ async def feedback_suggest(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     update_feedback_in_excel(user.id, context.user_data.get("feedback_liked", ""), context.user_data.get("feedback_missing", ""), suggest)
     await update.message.reply_text(
-        "Благодарим за твою обратную связь! 🙌 Это очень важно для дальнейшего развития нашего виртуального помощника! 💡✨\n"
-        "Среди всех участников опроса первого числа каждого календарного месяца мы будем разыгрывать памятный мерч 🎁👕 — следи за уведомлениями! 🔔😊",
+        "🙌 Благодарим за обратную связь!✨Это очень важно для дальнейшего развития нашего виртуального помощника!\n"
+        "🎁 Среди всех участников опроса первого числа каждого календарного месяца мы будем разыгрывать памятный мерч 👕 — следи за уведомлениями!",
         reply_markup=get_main_menu()
     )
     return MAIN_MENU
@@ -288,7 +288,7 @@ async def handle_return(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # === Запуск ===
 def main():
     print(f"📁 Папка проекта: {BASE_DIR}")
-    print(f"📄 Презентация: {'✅' if PRESENTATION_PATH.exists() else '❌'}")
+    print(f"📄 Презентация: {'✅ найдена' if PRESENTATION_PATH.exists() else '❌ НЕ НАЙДЕНА'}")
     print(f"🖼️ P2P.png: {'✅' if PHOTO_P2P_PATH.exists() else '❌'}")
     print(f"🖼️ мero.png: {'✅' if PHOTO_CULTURE_PATH.exists() else '❌'}")
     init_excel()
@@ -314,9 +314,7 @@ def main():
     )
 
     app.add_handler(conv_handler)
-
     app.add_handler(CallbackQueryHandler(button_handler))
-
     app.run_polling()
 
 if __name__ == "__main__":
