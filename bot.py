@@ -33,9 +33,12 @@ if not TOKEN:
 
 # === Пути к файлам ===
 BASE_DIR = Path("C:/Users/Леново/PycharmProjects/PythonProject").resolve()
-PRESENTATION_PATH = BASE_DIR / "Добро пожаловать в Сбер окт 25 v2.pdf"  # ← обновлённый путь
+WELCOME_PDF = BASE_DIR / "Добро пожаловать в Сбер окт 25 v2.pdf"
+CARE_PDF = BASE_DIR / "Забота о сотрудниках-сжато.pdf"
 PHOTO_P2P_PATH = BASE_DIR / "P2P.png"
 PHOTO_CULTURE_PATH = BASE_DIR / "меро.png"
+NEWS_PHOTO1 = BASE_DIR / "5460636998437042117.jpg"
+NEWS_PHOTO2 = BASE_DIR / "5460636998437042118.jpg"
 EXCEL_PATH = BASE_DIR / "users.xlsx"
 
 # === Состояния ===
@@ -49,7 +52,7 @@ EXCEL_PATH = BASE_DIR / "users.xlsx"
     FEEDBACK_SUGGEST
 ) = range(7)
 
-# === Инициализация Excel ===
+# === Excel ===
 def init_excel():
     if not EXCEL_PATH.exists():
         wb = Workbook()
@@ -96,9 +99,10 @@ def update_feedback_in_excel(user_id, liked, missing, suggest):
 def get_main_menu():
     return ReplyKeyboardMarkup(
         [
-            ["1. Сбер на Урале", "2. Видео-приветствие"],
+            ["1. Сбер на Урале", "2. Видео"],
             ["3. Peer-to-peer", "4. Культура и сообщества"],
-            ["5. Контакты", "6. Оставить обратную связь"]
+            ["5. Контакты", "6. Оставить обратную связь"],
+            ["7. Забота", "8. Новости"]
         ],
         resize_keyboard=True
     )
@@ -165,21 +169,21 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if text == "1. Сбер на Урале":
         await update.message.reply_text(
-            "🧩 Самую важную информацию про Сбер и Урал я собрал для тебя в презентации - изучай, задавай вопросы, если есть"
+            "🧩 Самую важную информацию про Сбер и Урал я собрал для тебя в презентации — изучай, задавай вопросы, если есть!"
         )
-        if PRESENTATION_PATH.exists():
+        if WELCOME_PDF.exists():
             try:
-                with open(PRESENTATION_PATH, 'rb') as f:
+                with open(WELCOME_PDF, 'rb') as f:
                     await update.message.reply_document(
                         document=InputFile(f, filename="Добро пожаловать в Сбер.pdf"),
                         reply_markup=get_back_and_ask()
                     )
             except Exception as e:
-                await update.message.reply_text(f"⚠️ Ошибка при отправке презентации: {str(e)}", reply_markup=get_back_and_ask())
+                await update.message.reply_text(f"⚠️ Ошибка: {str(e)}", reply_markup=get_back_and_ask())
         else:
-            await update.message.reply_text("⚠️ Презентация не найдена на сервере.", reply_markup=get_back_and_ask())
+            await update.message.reply_text("⚠️ Презентация не найдена.", reply_markup=get_back_and_ask())
 
-    elif text == "2. Видео-приветствие":
+    elif text == "2. Видео":
         await update.message.reply_text(
             "Ты стал частью большой команды Сбера и тебя приветствуют наши топ-менеджеры. Смотри видео 📽️.\n\n"
             "https://disk.yandex.ru/d/eAWTc08UnOBPwQ",
@@ -199,7 +203,7 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             with open(PHOTO_P2P_PATH, 'rb') as f:
                 await update.message.reply_photo(photo=InputFile(f), reply_markup=get_back_and_ask())
         else:
-            await update.message.reply_text("🖼️ Схема ролей временно недоступна.", reply_markup=get_back_and_ask())
+            await update.message.reply_text("🖼️ Схема временно недоступна.", reply_markup=get_back_and_ask())
 
     elif text == "4. Культура и сообщества":
         await update.message.reply_text(
@@ -211,7 +215,7 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             with open(PHOTO_CULTURE_PATH, 'rb') as f:
                 await update.message.reply_photo(photo=InputFile(f))
         else:
-            await update.message.reply_text("⚠️ Фото мероприятий не найдено.")
+            await update.message.reply_text("⚠️ Фото не найдено.")
 
         await update.message.reply_text(
             "Вступай в сообщества Уральского банка — будь в курсе событий!\n\n"
@@ -234,11 +238,54 @@ async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif text == "6. Оставить обратную связь":
         await update.message.reply_text(
-            "Спасибо, что помогаешь нам стать лучше! 🔑 Ответь, пожалуйста, на три коротких вопроса",
+            "Спасибо, что хочешь помочь нам стать лучше!🔑Ответь, пожалуйста, на три коротких вопроса.",
             reply_markup=ReplyKeyboardRemove()
         )
         await update.message.reply_text("🟢 Опиши, что понравилось при использовании бота:")
         return FEEDBACK_LIKED
+
+    elif text == "7. Забота":
+        await update.message.reply_text(
+            "☀️ Это все мое - о поддержке, льготах и возможностях для личного и профессионального роста в Сбере!"
+        )
+        if CARE_PDF.exists():
+            try:
+                with open(CARE_PDF, 'rb') as f:
+                    await update.message.reply_document(
+                        document=InputFile(f, filename="Забота о сотрудниках.pdf"),
+                        reply_markup=get_back_and_ask()
+                    )
+            except Exception as e:
+                await update.message.reply_text(f"⚠️ Ошибка: {str(e)}", reply_markup=get_back_and_ask())
+        else:
+            await update.message.reply_text("⚠️ Презентация не найдена.", reply_markup=get_back_and_ask())
+
+    elif text == "8. Новости":
+        news_text = (
+            "⚡ 22 октября в Технохабе Екатеринбурга прошла встреча Вице-президента-председателя Колтыпина Петра Николаевича "
+            "и Заместителя председателя, руководителя блока Люди и культура Осиповой Марии Леонидовны с новыми сотрудниками "
+            "команды Сбера на Урале. На встрече обсудили особенности бизнеса на Урале, какими качествами и ценностями должны "
+            "обладать сотрудники Сбера и как достигать карьерных высот. Такие мероприятия заряжают энергией и успехом!"
+        )
+        await update.message.reply_text(news_text)
+
+        # Отправка двух фото
+        photos_sent = 0
+        for photo_path in [NEWS_PHOTO1, NEWS_PHOTO2]:
+            if photo_path.exists():
+                try:
+                    with open(photo_path, 'rb') as f:
+                        await update.message.reply_photo(photo=InputFile(f))
+                    photos_sent += 1
+                except Exception as e:
+                    await update.message.reply_text(f"⚠️ Не удалось отправить фото: {str(e)}")
+            else:
+                await update.message.reply_text(f"⚠️ Фото не найдено: {photo_path.name}")
+
+        if photos_sent > 0:
+            await update.message.reply_text("Фото с мероприятия 👆", reply_markup=get_back_and_ask())
+        else:
+            await update.message.reply_text("Фото с мероприятия временно недоступны.", reply_markup=get_back_and_ask())
 
     return MAIN_MENU
 
@@ -260,8 +307,8 @@ async def feedback_suggest(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     update_feedback_in_excel(user.id, context.user_data.get("feedback_liked", ""), context.user_data.get("feedback_missing", ""), suggest)
     await update.message.reply_text(
-        "🙌 Благодарим за обратную связь!✨Это очень важно для дальнейшего развития нашего виртуального помощника!\n"
-        "🎁 Среди всех участников опроса первого числа каждого календарного месяца мы будем разыгрывать памятный мерч 👕 — следи за уведомлениями!",
+        "🙌 Благодарим за твою обратную связь! Это очень важно для дальнейшего развития нашего виртуального помощника!✨\n"
+        "🎁 Среди всех участников опроса первого числа каждого календарного месяца мы будем разыгрывать памятный мерч👕 — следи за уведомлениями!",
         reply_markup=get_main_menu()
     )
     return MAIN_MENU
@@ -287,10 +334,11 @@ async def handle_return(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # === Запуск ===
 def main():
-    print(f"📁 Папка проекта: {BASE_DIR}")
-    print(f"📄 Презентация: {'✅ найдена' if PRESENTATION_PATH.exists() else '❌ НЕ НАЙДЕНА'}")
-    print(f"🖼️ P2P.png: {'✅' if PHOTO_P2P_PATH.exists() else '❌'}")
-    print(f"🖼️ мero.png: {'✅' if PHOTO_CULTURE_PATH.exists() else '❌'}")
+    print(f"📁 Папка: {BASE_DIR}")
+    print(f"📄 Добро пожаловать.pdf: {'✅' if WELCOME_PDF.exists() else '❌'}")
+    print(f"📄 Забота.pdf: {'✅' if CARE_PDF.exists() else '❌'}")
+    print(f"🖼️ Новости фото 1: {'✅' if NEWS_PHOTO1.exists() else '❌'}")
+    print(f"🖼️ Новости фото 2: {'✅' if NEWS_PHOTO2.exists() else '❌'}")
     init_excel()
     logging.basicConfig(level=logging.INFO)
     app = Application.builder().token(TOKEN).build()
